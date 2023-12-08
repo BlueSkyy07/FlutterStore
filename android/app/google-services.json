@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "297793596859",
+    "project_id": "cuahang-dd5e0",
+    "storage_bucket": "cuahang-dd5e0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:297793596859:android:3c30ae24c542907d79a89e",
+        "android_client_info": {
+          "package_name": "com.example.admin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgkd6mmDjA7LeDLG0qO9A3sPlS8UXEk1A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
