@@ -14,8 +14,8 @@ void main() async {
               apiKey: "AIzaSyCgkd6mmDjA7LeDLG0qO9A3sPlS8UXEk1A",
               appId: "1:297793596859:android:3c30ae24c542907d79a89e",
               messagingSenderId: "297793596859",
-              projectId: "cuahang-dd5e0"),
-        )
+              projectId: "cuahang-dd5e0",
+              storageBucket: "gs://cuahang-dd5e0.appspot.com"))
       : await Firebase.initializeApp();
   runApp(const MyApp());
 }
