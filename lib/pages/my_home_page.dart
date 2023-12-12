@@ -1,4 +1,5 @@
 import 'package:admin/pages/addProduct_page.dart';
+import 'package:admin/pages/product_detail_page.dart';
 import 'package:admin/read%20data/get_product_image.dart';
 import 'package:admin/read%20data/get_product_name.dart';
 import 'package:admin/read%20data/get_product_price.dart';
@@ -30,13 +31,6 @@ class _MyHomePageState extends State<MyHomePage> {
               print(element.reference);
               docIDs.add(element.reference.id);
             }));
-  }
-
-  void updateProducts() {
-    setState(() {
-      // Gọi lại hàm lấy danh sách ID để cập nhật danh sách sản phẩm
-      getDocId();
-    });
   }
 
   @override
@@ -122,10 +116,13 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          await Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => AddProduct()),
+            MaterialPageRoute(
+              // builder: (_) => AddProduct(updateCallback: updateProducts),
+              builder: (_) => AddProduct(),
+            ),
           );
         },
         child: Icon(Icons.add),
@@ -235,32 +232,41 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 itemCount: docIDs.length,
                 itemBuilder: (context, index) {
-                  return Container(
-                    alignment: Alignment.topCenter,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black38,
-                              offset: Offset(2, 3),
-                              blurRadius: 3)
-                        ]),
-                    child: Column(
-                      children: [
-                        Container(
-                          child: GetProductName(
-                            documentId: docIDs[index],
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) =>
+                                  ProductDetailPage(productId: docIDs[index])));
+                    },
+                    child: Container(
+                      alignment: Alignment.topCenter,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black38,
+                                offset: Offset(2, 3),
+                                blurRadius: 3)
+                          ]),
+                      child: Column(
+                        children: [
+                          Container(
+                            child: GetProductName(
+                              documentId: docIDs[index],
+                            ),
                           ),
-                        ),
-                        Container(
-                          child: GetProductPrice(documentId: docIDs[index]),
-                        ),
-                        Positioned(
-                          // Điều chỉnh vị trí theo ý muốn
-                          child: GetProductImage(documentId: docIDs[index]),
-                        ),
-                      ],
+                          Container(
+                            child: GetProductPrice(documentId: docIDs[index]),
+                          ),
+                          Container(
+                            // Điều chỉnh vị trí theo ý muốn
+                            child: GetProductImage(documentId: docIDs[index]),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },

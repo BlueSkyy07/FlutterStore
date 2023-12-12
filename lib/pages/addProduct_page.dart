@@ -22,7 +22,7 @@ class _AddProductState extends State<AddProduct> {
   late firebase_storage.Reference ref;
   Uint8List? _image;
 
-  Future Add() async {
+  Future<void> Add() async {
     if (_image != null) {
       try {
         // Tạo tham chiếu đến Firebase Storage
@@ -42,6 +42,9 @@ class _AddProductState extends State<AddProduct> {
 
         // Hiển thị thông báo hoặc thực hiện các công việc khác khi thành công
         print('Product added successfully!');
+
+        // Call the update callback only once after the product is added
+        widget.updateCallback?.call();
       } catch (error) {
         // Xử lý lỗi khi có vấn đề với quá trình tải lên
         print('Error adding product: $error');
@@ -49,9 +52,6 @@ class _AddProductState extends State<AddProduct> {
     } else {
       // Hiển thị thông báo hoặc thực hiện các công việc khác nếu không có ảnh được chọn
       print('No image selected!');
-    }
-    if (widget.updateCallback != null) {
-      widget.updateCallback!();
     }
   }
 
