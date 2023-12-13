@@ -7,8 +7,8 @@ import 'package:uuid/uuid.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final String productId;
-
-  ProductDetailPage({required this.productId});
+  final Function? updateCallback1;
+  ProductDetailPage({required this.productId, required this.updateCallback1});
 
   @override
   State<ProductDetailPage> createState() => _ProductDetailPageState();
@@ -76,6 +76,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
         // Call the update callback only once after the product is added
         await _refreshPage();
+        widget.updateCallback1?.call();
       } catch (error) {
         // Xử lý lỗi khi có vấn đề với quá trình tải lên
         print('Error adding product: $error');
@@ -84,6 +85,44 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       // Hiển thị thông báo hoặc thực hiện các công việc khác nếu không có ảnh được chọn
       print('No image selected!');
     }
+  }
+
+  // Function to delete the product
+  Future<void> _deleteProduct() async {
+    // Show a confirmation dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Confirmation"),
+          content: Text("Are you sure you want to delete this product?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                // Delete the product from Firestore
+                await FirebaseFirestore.instance
+                    .collection('Store')
+                    .doc(widget.productId)
+                    .delete();
+
+                // Navigate back to the home page
+                Navigator.popUntil(context, (route) => route.isFirst);
+
+                // Call the update callback after deletion
+                widget.updateCallback1?.call();
+              },
+              child: Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _openEditBox(String field, String initialValue) {
@@ -283,7 +322,27 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     ],
                   ),
                   SizedBox(height: 20),
-                  ElevatedButton(onPressed: () {}, child: Text('Delete'))
+                  Center(
+                      child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: MaterialButton(
+                      onPressed: _deleteProduct,
+                      child: Container(
+                        padding: EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Center(
+                          child: Text(
+                            "Delete",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ))
                 ],
               ),
             );

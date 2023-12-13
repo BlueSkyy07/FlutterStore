@@ -33,6 +33,11 @@ class _MyHomePageState extends State<MyHomePage> {
             }));
   }
 
+  Future<void> updateProducts() async {
+    docIDs.clear();
+    setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
@@ -120,101 +125,19 @@ class _MyHomePageState extends State<MyHomePage> {
           await Navigator.push(
             context,
             MaterialPageRoute(
-              // builder: (_) => AddProduct(updateCallback: updateProducts),
-              builder: (_) => AddProduct(),
+              builder: (_) => AddProduct(updateCallback: updateProducts),
+              // builder: (_) => AddProduct(),
             ),
           );
         },
         child: Icon(Icons.add),
       ),
-      // body: Container(
-      //   child: Column(
-      //     mainAxisAlignment: MainAxisAlignment.start,
-      //     children: [
-      //       Container(
-      //         child: Padding(
-      //           padding: const EdgeInsets.only(top: 15, left: 30),
-      //           child: Container(
-      //             width: size.width * 7 / 10,
-      //             height: 35,
-      //             decoration: BoxDecoration(
-      //               color: Colors.white,
-      //               borderRadius: BorderRadius.circular(9),
-      //               boxShadow: [
-      //                 BoxShadow(
-      //                   blurRadius: 6,
-      //                   offset: Offset(3, 6),
-      //                   color: Colors.black26,
-      //                 )
-      //               ],
-      //             ),
-      //             child: Stack(
-      //               children: [
-      //                 Positioned(
-      //                   top: 0,
-      //                   bottom: 0,
-      //                   child: Image.asset(AppAssets.search),
-      //                 ),
-      //                 Positioned(
-      //                   left: 40,
-      //                   top: 10,
-      //                   child: Text(
-      //                     "Search",
-      //                     style: TextStyle(
-      //                       fontStyle: FontStyle.italic,
-      //                       color: Colors.black26,
-      //                     ),
-      //                   ),
-      //                 ),
-      //               ],
-      //             ),
-      //           ),
-      //         ),
-      //       ),
-      //       // Padding(
-      //       //   padding: const EdgeInsets.symmetric(vertical: 24),
-      //       //   child: Container(
-      //       //     height: 200, // Điều chỉnh độ cao theo ý muốn
-      //       //     child: PageView.builder(
-      //       //       controller: _pageController,
-      //       //       itemCount: 3, // Số lượng hình ảnh trong danh sách
-      //       //       itemBuilder: (context, index) {
-      //       //         List<String> images = [
-      //       //           AppAssets.qc1,
-      //       //           AppAssets.qc2,
-      //       //           AppAssets.qc3,
-      //       //           AppAssets.qc4
-      //       //         ];
-      //       //         return Image.asset(
-      //       //           images[index],
-      //       //           fit: BoxFit.cover,
-      //       //         ); // Đường link hình ảnh thay thế
-      //       //       },
-      //       //     ),
-      //       //   ),
-      //       // ),
-
-      //       SizedBox(height: 30),
-      //       Expanded(
-      //         child: FutureBuilder(
-      //           future: getDocId(),
-      //           builder: (context, snapshot) {
-      //             return ListView.builder(
-      //               itemCount: docIDs.length,
-      //               itemBuilder: (context, index) {
-      //                 return ListTile(
-      //                   title: Text(docIDs[index]),
-      //                 );
-      //               },
-      //             );
-      //           },
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      // ));
-
-      body: Container(
+      body: RefreshIndicator(
+        onRefresh: () async {
+          docIDs.clear();
+          await Future.delayed(Duration(seconds: 2));
+          setState(() {});
+        },
         child: FutureBuilder(
           future: getDocId(),
           builder: (context, snapshot) {
@@ -237,8 +160,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (_) =>
-                                  ProductDetailPage(productId: docIDs[index])));
+                              builder: (_) => ProductDetailPage(
+                                    updateCallback1: updateProducts,
+                                    productId: docIDs[index],
+                                  )));
                     },
                     child: Container(
                       alignment: Alignment.topCenter,
