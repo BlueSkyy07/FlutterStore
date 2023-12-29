@@ -1,4 +1,5 @@
 import 'package:admin/pages/addProduct_page.dart';
+import 'package:admin/pages/order_confirmation_page.dart';
 import 'package:admin/pages/product_detail_page.dart';
 import 'package:admin/read%20data/get_product_image.dart';
 import 'package:admin/read%20data/get_product_name.dart';
@@ -51,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
       key: _scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
         elevation: 0,
         leading: InkWell(
           onTap: () {
@@ -60,15 +61,21 @@ class _MyHomePageState extends State<MyHomePage> {
           },
           child: Image.asset(AppAssets.admin),
         ),
-        actions: [
-          InkWell(
-            onTap: () {},
-            child: Image.asset(AppAssets.notification),
-          ),
-          InkWell(
-            onTap: () {},
-            child: Image.asset(AppAssets.list),
-          ),
+        title: Title(
+            color: Color.fromARGB(255, 235, 120, 14),
+            child: Text(
+              'ADMIN',
+              style: TextStyle(color: Colors.amber[800]),
+            )),
+        actions: <Widget>[
+          IconButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => OrderComfirmPage()));
+            },
+            icon: Icon(Icons.align_horizontal_right_sharp),
+            color: Colors.black,
+          )
         ],
       ),
       drawer: Drawer(
@@ -109,16 +116,6 @@ class _MyHomePageState extends State<MyHomePage> {
             // Thêm các mục khác nếu cần
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        elevation: 0,
-        items: [
-          BottomNavigationBarItem(icon: Image.asset(AppAssets.home), label: ''),
-          BottomNavigationBarItem(
-              icon: Image.asset(AppAssets.favorite), label: ''),
-          BottomNavigationBarItem(icon: Image.asset(AppAssets.cart), label: ''),
-          BottomNavigationBarItem(icon: Image.asset(AppAssets.chat), label: ''),
-        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
@@ -169,7 +166,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       alignment: Alignment.topCenter,
                       decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
+                          // borderRadius: BorderRadius.circular(12),
                           boxShadow: [
                             BoxShadow(
                                 color: Colors.black38,
@@ -179,16 +176,16 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Column(
                         children: [
                           Container(
+                            // Điều chỉnh vị trí theo ý muốn
+                            child: GetProductImage(documentId: docIDs[index]),
+                          ),
+                          Container(
                             child: GetProductName(
                               documentId: docIDs[index],
                             ),
                           ),
                           Container(
                             child: GetProductPrice(documentId: docIDs[index]),
-                          ),
-                          Container(
-                            // Điều chỉnh vị trí theo ý muốn
-                            child: GetProductImage(documentId: docIDs[index]),
                           ),
                         ],
                       ),
